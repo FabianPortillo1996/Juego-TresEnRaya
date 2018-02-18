@@ -16,7 +16,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import controller.Juego;
-import javafx.scene.layout.AnchorPane;
 import model.Jugador;
 
 
@@ -25,36 +24,38 @@ import model.Jugador;
  */
 public class FXMLviewController implements Initializable {
 
-    @FXML
-    private Pane pane00, pane01, pane02,
-            pane10, pane11, pane12,
-            pane20, pane21, pane22;
-    @FXML
-    private AnchorPane ventana;
-
     private Juego juego;
     static Jugador jugador1;
     static Jugador jugador2;
 
+    /**
+     * Identifica si un Pane se encuentra vacio y pone la marca "X" o "O"
+     *
+     * @param e
+     */
     @FXML
     protected void identificarPane(MouseEvent e) {
         Pane pane = (Pane) e.getSource();
         boolean vacio;
-        if (pane.getChildren().isEmpty()) {
-            vacio = true;
-        } else {
-            vacio = false;
-        }
+
+        vacio = pane.getChildren().isEmpty();
         String espaciojugado = pane.getId();
         espaciojugado = espaciojugado.substring(4);
+        String marca = juego.setMarca(juego.getNoJugador(), vacio, espaciojugado);
+        if (marca.equals("X") || marca.equals("O")) {
+            Text textX = new Text(marca);
+            setEstilosText(textX, pane);
+            pane.getChildren().add(textX);
+        } else {
+            System.out.println(marca);
+        }
+    }
 
-        Text textX = new Text(juego.setMarca(juego.getNoJugador(), vacio, espaciojugado));
+    private void setEstilosText(Text textX, Pane pane) {
         textX.setFont(Font.font("System", 96));
         textX.setFill(Paint.valueOf("#bdf271"));
         textX.setLayoutY(pane.getHeight() / 2 + 30);
         textX.setLayoutX(pane.getWidth() / 2 - 30);
-        pane.getChildren().add(textX);
-
     }
 
     @Override
