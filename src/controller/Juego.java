@@ -38,21 +38,26 @@ public class Juego {
         int columnas = opcionesganar[0].length;
         int longitud = espacios_jugados.length;
         int aciertos = 0;
+        boolean es_ganador = false;
 
+        comprobar:
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 for (int k = 0; k < longitud; k++) {
                     if (espacios_jugados[k] == opcionesganar[i][j]) {
                         aciertos++;
+                        System.out.println("Aciertos : " + aciertos);
                         if (aciertos == 3) {
-                            return true;
+                            es_ganador = true;
+                            break comprobar;
                         }
                     }
                 }
             }
             aciertos = 0;
         }
-        return false;
+
+        return es_ganador;
     }
 
     /**
