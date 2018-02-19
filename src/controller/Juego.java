@@ -2,7 +2,6 @@ package controller;
 
 import static controller.FXMLviewController.jugador1;
 import static controller.FXMLviewController.jugador2;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -39,7 +38,6 @@ public class Juego {
                 for (int k = 0; k < longitud; k++) {
                     if (espacios_jugados[k] == opcionesganar[i][j]) {
                         aciertos++;
-                        System.out.println("Aciertos: " + aciertos);
                         if (aciertos == 3) {
                             return true;
                         }
@@ -77,10 +75,10 @@ public class Juego {
     public String estadoJuego() {
         if (totalClick >= 4) {
             if (compruebaAciertos(parsearEspacios(jugador1.getEspacioJugados()))) {
-                return "Jugador 1";
+                return "Ganador " + jugador1.getNombreJugador();
             }
             if (compruebaAciertos(parsearEspacios(jugador2.getEspacioJugados()))) {
-                return "Jugador 2";
+                return "Ganador " + jugador2.getNombreJugador();
             }
         }
         if (totalClick == 9) {

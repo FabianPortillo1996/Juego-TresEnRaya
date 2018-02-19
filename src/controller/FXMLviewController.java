@@ -16,12 +16,16 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import controller.Juego;
-import java.awt.Dialog;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
+
 import model.Jugador;
 
 
@@ -39,7 +43,7 @@ public class FXMLviewController implements Initializable {
 
     /**
      * Identifica si un Pane se encuentra vacio y pone la marca "X" o "O"
-     *
+     * 
      * @param e
      */
     @FXML
@@ -62,12 +66,49 @@ public class FXMLviewController implements Initializable {
         muestraAlertaEstado(juego.estadoJuego());
     }
 
+    /**
+     * Muestra un Alert en caso de que exista un ganador o un empate entre los
+     * jugadores
+     *
+     * @param estado
+     */
     public void muestraAlertaEstado(String estado) {
         if (!estado.equals("Ninguno")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Felicidades !!!");
             alert.setContentText(estado);
             alert.showAndWait();
             ventana.setDisable(true);
+            nuevoJuego();
+        }
+    }
+
+    /**
+     * Pregunta si se desea continuar jugando abriendo una nueva, o cerrando la
+     * actaual.
+     */
+    public void nuevoJuego() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quieres volver a jugar ?");
+        alert.setContentText("Jugar de nuevo");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+
+            Stage ventana_actual = (Stage) ventana.getScene().getWindow();
+            ventana_actual.close();
+
+            try {
+                Stage ventana_nueva = new Stage();
+                Parent parent = FXMLLoader.load(getClass().getResource("/view/FXMLview.fxml"));
+                Scene scene = new Scene(parent);
+                ventana_nueva.setScene(scene);
+                ventana_nueva.show();
+            } catch (IOException ex) {
+
+            }
+        } else {
+            Stage ventana_actual = (Stage) ventana.getScene().getWindow();
+            ventana_actual.close();
         }
     }
 
@@ -86,8 +127,10 @@ public class FXMLviewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        String nombre_jugador_1 = JOptionPane.showInputDialog(null, "Nombre jugador 1 (O): ");
+        String nombre_jugador_2 = JOptionPane.showInputDialog(null, "Nombre jugador 2 (X): ");
         juego = new Juego();
-        jugador1 = new Jugador("Fabian");
-        jugador2 = new Jugador("Fabian 2");
+        jugador1 = new Jugador(nombre_jugador_1);
+        jugador2 = new Jugador(nombre_jugador_2);
     }
 }
