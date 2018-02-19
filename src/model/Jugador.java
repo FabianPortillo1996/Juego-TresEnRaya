@@ -12,7 +12,7 @@ public class Jugador {
 
     public Jugador(String nombreJugador) {
         this.nombreJugador = nombreJugador;
-        this.espaciosJugados = ",";
+        this.espaciosJugados = "";
     }
 
     public String getNombreJugador() {

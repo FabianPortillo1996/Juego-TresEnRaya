@@ -2,6 +2,7 @@ package controller;
 
 import static controller.FXMLviewController.jugador1;
 import static controller.FXMLviewController.jugador2;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -9,9 +10,9 @@ import static controller.FXMLviewController.jugador2;
  */
 public class Juego {
 
-    int nojugador;
-    int[][] opcionesganar;
-    int totalClick;
+    private int nojugador;
+    private int[][] opcionesganar;
+    private int totalClick;
 
     public Juego() {
         opcionesganar = new int[][]{
@@ -22,26 +23,47 @@ public class Juego {
             {1, 11, 21},
             {2, 12, 22},
             {0, 11, 22},
-            {20, 11, 0}};
+            {20, 11, 2}};
         totalClick = 0;
     }
 
+    public boolean compruebaAciertos(int[] espacios_jugados) {
+
+        int filas = opcionesganar.length;
+        int columnas = opcionesganar[0].length;
+        int longitud = espacios_jugados.length;
+        int aciertos = 0;
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                for (int k = 0; k < longitud; k++) {
+                    if (espacios_jugados[k] == opcionesganar[i][j]) {
+                        aciertos++;
+                        System.out.println("Aciertos: " + aciertos);
+                        if (aciertos == 3) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            aciertos = 0;
+        }
+        return false;
+    }
+
     public String setMarca(int numberjugador, boolean vacio, String espaciojugado) {
-        if (vacio && poderJugar()) {
+        if (vacio) {
             if (numberjugador == 1) {
                 nojugador = 0;
-                ++totalClick;
-                jugador1.setEspacioJugado("," + espaciojugado);
-                System.out.println("Jugador 1 :" + jugador1.getEspacioJugados());
+                totalClick++;
+                jugador1.setEspacioJugado(espaciojugado + ",");
                 return "X";
             } else {
                 nojugador = 1;
-                ++totalClick;
-                jugador2.setEspacioJugado("," + espaciojugado);
-                System.out.println("Jugador 2 :" + jugador2.getEspacioJugados());
+                totalClick++;
+                jugador2.setEspacioJugado(espaciojugado + ",");
                 return "O";
             }
-
         } else {
             nojugador = numberjugador;
             return "";
@@ -52,14 +74,29 @@ public class Juego {
         return nojugador;
     }
 
-    public boolean poderJugar() {
-        return true;
+    public String estadoJuego() {
+        if (totalClick >= 4) {
+            if (compruebaAciertos(parsearEspacios(jugador1.getEspacioJugados()))) {
+                return "Jugador 1";
+            }
+            if (compruebaAciertos(parsearEspacios(jugador2.getEspacioJugados()))) {
+                return "Jugador 2";
+            }
+        }
+        if (totalClick == 9) {
+            return "Empate";
+        }
+        return "Ninguno";
     }
 
-    public boolean compruebaEmpate() {
-        if (totalClick == 8) {
-            return true;
+    public int[] parsearEspacios(String espacios) {
+        String[] espacios_array = espacios.split(",");
+        int length = espacios_array.length;
+        int[] espacios_int = new int[length];
+        for (int i = 0; i < length; i++) {
+            espacios_int[i] = Integer.parseInt(espacios_array[i]);
         }
-        return false;
+        return espacios_int;
     }
+
 }
