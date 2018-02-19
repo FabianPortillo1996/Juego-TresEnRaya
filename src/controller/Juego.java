@@ -26,6 +26,12 @@ public class Juego {
         totalClick = 0;
     }
 
+    /**
+     * Verifica los aciertos que ha tenido el jugador
+     *
+     * @param espacios_jugados
+     * @return boolean
+     */
     public boolean compruebaAciertos(int[] espacios_jugados) {
 
         int filas = opcionesganar.length;
@@ -49,6 +55,14 @@ public class Juego {
         return false;
     }
 
+    /**
+     * Identifica la marca que se pondra en el tablero
+     *
+     * @param numberjugador
+     * @param vacio
+     * @param espaciojugado
+     * @return String
+     */
     public String setMarca(int numberjugador, boolean vacio, String espaciojugado) {
         if (vacio) {
             if (numberjugador == 1) {
@@ -68,10 +82,20 @@ public class Juego {
         }
     }
 
+    /**
+     * Obtiene el numero del jugador que ha dado click
+     *
+     * @return int
+     */
     public int getNoJugador() {
         return nojugador;
     }
 
+    /**
+     * Comprueba si existe ganador,empate, o ninguno de los anteriores
+     *
+     * @return String
+     */
     public String estadoJuego() {
         if (totalClick >= 4) {
             if (compruebaAciertos(parsearEspacios(jugador1.getEspacioJugados()))) {
@@ -87,6 +111,13 @@ public class Juego {
         return "Ninguno";
     }
 
+    /**
+     * Pasa la cadena que contiene los espacios que tiene el jugador a un
+     * arreglo de enteros para poder compararlos con la matriz de posibilidades
+     *
+     * @param espacios
+     * @return int[]
+     */
     public int[] parsearEspacios(String espacios) {
         String[] espacios_array = espacios.split(",");
         int length = espacios_array.length;
